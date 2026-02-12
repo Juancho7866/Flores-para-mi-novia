@@ -1,8 +1,7 @@
 //© Zero - Código libre no comercial
 
-
-// Cargar el SVG y animar los corazones
-fetch('Img/treelove.svg')
+// 1. CORRECCIÓN: 'Img/' cambió a 'IMG/' para que GitHub lo encuentre
+fetch('IMG/treelove.svg')
   .then(res => res.text())
   .then(svgText => {
     const container = document.getElementById('tree-container');
@@ -61,13 +60,13 @@ fetch('Img/treelove.svg')
     });
   });
 
-// Efecto máquina de escribir para el texto de dedicatoria (seguidores)
+// Efecto máquina de escribir para el texto de dedicatoria
 function getURLParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-function showDedicationText() { //seguidores
+function showDedicationText() { 
   let text = getURLParam('text');
   if (!text) {
     text = `Para el amor de mi vida:\n\nDesde el primer momento supe que eras tú. Tu sonrisa, tu voz, tu forma de ser… todo en ti me hace sentir en casa.\n\nGracias por acompañarme en cada paso, por entenderme incluso en silencio, y por llenar mis días de amor.\n\nTe amo más de lo que las palabras pueden expresar.`;  } else {
@@ -91,7 +90,6 @@ function showDedicationText() { //seguidores
 
 // Firma manuscrita animada
 function showSignature() {
-  // Cambia para buscar la firma dentro del contenedor de dedicatoria
   const dedication = document.getElementById('dedication-text');
   let signature = dedication.querySelector('#signature');
   if (!signature) {
@@ -105,8 +103,6 @@ function showSignature() {
   signature.classList.add('visible');
 }
 
-
-
 // Controlador de objetos flotantes
 function startFloatingObjects() {
   const container = document.getElementById('floating-objects');
@@ -114,13 +110,11 @@ function startFloatingObjects() {
   function spawn() {
     let el = document.createElement('div');
     el.className = 'floating-petal';
-    // Posición inicial
     el.style.left = `${Math.random() * 90 + 2}%`;
     el.style.top = `${100 + Math.random() * 10}%`;
     el.style.opacity = 0.7 + Math.random() * 0.3;
     container.appendChild(el);
 
-    // Animación flotante
     const duration = 6000 + Math.random() * 4000;
     const drift = (Math.random() - 0.5) * 60;
     setTimeout(() => {
@@ -129,19 +123,17 @@ function startFloatingObjects() {
       el.style.opacity = 0.2;
     }, 30);
 
-    // Eliminar después de animar
     setTimeout(() => {
       if (el.parentNode) el.parentNode.removeChild(el);
     }, duration + 2000);
 
-    // Generar más objetos
     if (count++ < 32) setTimeout(spawn, 350 + Math.random() * 500);
     else setTimeout(spawn, 1200 + Math.random() * 1200);
   }
   spawn();
 }
 
-// Cuenta regresiva o fecha especial
+// Cuenta regresiva
 function showCountdown() {
   const container = document.getElementById('countdown');
   let startParam = getURLParam('start');
@@ -173,18 +165,15 @@ function playBackgroundMusic() {
   const audio = document.getElementById('bg-music');
   if (!audio) return;
 
-  // --- Opción archivo local por parámetro 'musica' ---
   let musicaParam = getURLParam('musica');
   if (musicaParam) {
-    // Decodifica y previene rutas maliciosas
     musicaParam = decodeURIComponent(musicaParam).replace(/[^\w\d .\-]/g, '');
-    audio.src = 'Music/' + musicaParam;
+    // 2. CORRECCIÓN: 'Music/' cambió a 'MUSIC/'
+    audio.src = 'MUSIC/' + musicaParam;
   }
 
-  // --- Opción YouTube (solo mensaje de ayuda) ---
   let youtubeParam = getURLParam('youtube');
   if (youtubeParam) {
-    // Muestra mensaje de ayuda para descargar el audio
     let helpMsg = document.getElementById('yt-help-msg');
     if (!helpMsg) {
       helpMsg = document.createElement('div');
@@ -199,7 +188,8 @@ function playBackgroundMusic() {
       helpMsg.style.boxShadow = '0 2px 8px #e6002633';
       helpMsg.style.fontSize = '1.05em';
       helpMsg.style.zIndex = 100;
-      helpMsg.innerHTML = 'Para usar música de YouTube, descarga el audio (por ejemplo, usando y2mate, 4K Video Downloader, etc.), colócalo en la carpeta <b>Music</b> y usa la URL así:<br><br><code>?musica=nombre.mp3</code>';
+      // 3. CORRECCIÓN: Carpeta en el mensaje de ayuda
+      helpMsg.innerHTML = 'Para usar música, colócalo en la carpeta <b>MUSIC</b> y usa la URL así:<br><br><code>?musica=nombre.mp3</code>';
       document.body.appendChild(helpMsg);
       setTimeout(() => { if(helpMsg) helpMsg.remove(); }, 15000);
     }
@@ -224,11 +214,9 @@ function playBackgroundMusic() {
   }
   audio.volume = 0.7;
   audio.loop = true;
-  // Intentar reproducir inmediatamente
   audio.play().then(() => {
     btn.textContent = '🔊 Música';
   }).catch(() => {
-    // Si falla el autoplay, esperar click en el botón
     btn.textContent = '▶️ Música';
   });
   btn.onclick = () => {
@@ -242,7 +230,6 @@ function playBackgroundMusic() {
   };
 }
 
-// Intentar reproducir la música lo antes posible (al cargar la página)
 window.addEventListener('DOMContentLoaded', () => {
   playBackgroundMusic();
 });
